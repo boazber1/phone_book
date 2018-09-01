@@ -16,7 +16,7 @@ namespace PhoneBook.ViewModels.Contact
 {
     public class ContactEventArgs : EventArgs
     {
-        public PhoneBook.ViewModels.Contacts.Model.Contact contact { get; set; }
+        public PhoneBook.ViewModels.Contacts.Model.Contact Contact { get; set; }
     }
 
     public class ContactViewModel : ViewModelBase
@@ -39,16 +39,25 @@ namespace PhoneBook.ViewModels.Contact
             _contact = contact;
             SelectedPhone = _contact.PhoneNumbers.First();
             DeleteContactCommand = new RelayCommand(DeleteContact);
-            EditClickedCommand = new RelayCommand<PhoneBook.ViewModels.Contacts.Model.Contact >(OnEditClicked);
+            EditClickedCommand = new RelayCommand(OnEditClicked);
         }
 
-        public virtual void OnEditContactClicked(PhoneBook.ViewModels.Contacts.Model.Contact contact)
+        private void OnEditClicked()
         {
-           
-            //if(EditContactClicked != null)
-            //{
-            //    EditContactClicked(this, new ContactEventArgs() {});
-            //}
+            OnEditContactClicked(_contact);
+        }
+
+        protected virtual void OnEditContactClicked(PhoneBook.ViewModels.Contacts.Model.Contact contact)
+        {
+            if (EditContactClicked != null)
+            {
+                var args = new ContactEventArgs
+                {
+                    Contact = contact,
+                };
+                EditContactClicked(this, args);
+            }
+                
         }
 
         public string City
@@ -119,10 +128,6 @@ namespace PhoneBook.ViewModels.Contact
             } }
 
 
-        public void OnEditClicked(PhoneBook.ViewModels.Contacts.Model.Contact contact)
-        {
-            OnEditContactClicked(contact);
-        }
 
         private void DeleteContact()
         {

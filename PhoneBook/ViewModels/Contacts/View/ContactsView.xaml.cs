@@ -1,4 +1,5 @@
-﻿using PhoneBook.ViewModels.Contacts.ViewModel;
+﻿using PhoneBook.ViewModels.Contact;
+using PhoneBook.ViewModels.Contacts.ViewModel;
 using PhoneBook.ViewModels.Forum.View;
 using System;
 using System.Collections.Generic;
@@ -26,21 +27,36 @@ namespace PhoneBook.ViewModels.Contacts.View
             InitializeComponent();
             var viewModel  = new ContactsViewModel();
             viewModel.OnNewContactClicked += OpenForumOnAddNewcontact;
+            viewModel.OnEdit += openEditOrAddForm;
             //viewModel.OnEditContactClicked += OpenForumOnEditNewcontact;
             DataContext = viewModel;          
         }
-     
+
+        private void openEditOrAddForm(object sender, ContactEventArgs args)
+        {
+            if(args != null)
+            {
+                var contact = args.Contact;
+                if(contact != null)
+                {
+                    ForumView forumView = new ForumView(contact);
+                    forumView.ShowDialog();
+                }
+
+            }
+                
+        }
+
         public void OpenForumOnAddNewcontact(object sender, EventArgs e)
         {
-            ForumView forumView = new ForumView();
+            ForumView forumView = new ForumView(null);
             forumView.ShowDialog();
            
         }
 
         public void OpenForumOnEditNewcontact(object sender, EventArgs e)
         {
-            ForumView forumView = new ForumView();
-            forumView.ShowDialog();
+            
         }
     }
 }

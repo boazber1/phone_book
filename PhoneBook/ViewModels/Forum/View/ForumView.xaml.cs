@@ -1,4 +1,5 @@
-﻿using PhoneBook.ViewModels.Forum.ViewModel;
+﻿using PhoneBook.ViewModels.Contact;
+using PhoneBook.ViewModels.Forum.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +21,10 @@ namespace PhoneBook.ViewModels.Forum.View
     /// </summary>
     public partial class ForumView : Window
     {
-        public ForumView()
+        public ForumView(Contacts.Model.Contact contact)
         {
             InitializeComponent();
-            DataContext = new ForumViewModel();
+            DataContext = new ContactViewModel(contact);
         }
 
 

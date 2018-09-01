@@ -72,7 +72,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Command\CustomCommand.cs" />
     <Compile Include="ViewModels\Contacts\Model\Contact.cs" />
     <Compile Include="ViewModels\Contacts\ViewModel\ContactsViewModel.cs" />
     <Compile Include="ViewModels\Contacts\View\ContactsView.xaml.cs">

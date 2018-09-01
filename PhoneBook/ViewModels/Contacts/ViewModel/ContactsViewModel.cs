@@ -13,6 +13,7 @@ using Dapper;
 using System.ComponentModel;
 using PhoneBook.ViewModels.Forum.View;
 using PhoneBook.ViewModels.Contact;
+using static PhoneBook.ViewModels.Contact.ContactViewModel;
 
 namespace PhoneBook.ViewModels.Contacts.ViewModel
 {
@@ -25,8 +26,9 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
         public ICommand AddNewContactCommand { get; set; }
         private string _searchString;
         public event EventHandler OnNewContactClicked;
+        public event EditContactClickedEventHandler OnEdit;
         //public event EventHandler OnEditContactClicked;
-      
+
 
         public string SearchString
         {
@@ -98,8 +100,15 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
                 var contactViewModel = new ContactViewModel(con);
                 //contactViewModel.OnCotactEditClicked += SingleContactEditClicked;
                 contactViewModel.OnCotactDeleted += SingleContactDeleted;
+                contactViewModel.EditContactClicked += SingleContactEdit;
                 ContactsList.Add(contactViewModel);
             }
+        }
+
+        private void SingleContactEdit(object sender, ContactEventArgs args)
+        {
+            if(OnEdit != null)
+                OnEdit(sender, args);
         }
 
         //private void SingleContactEditClicked(object sender, EventArgs e)
@@ -108,7 +117,7 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
         //    {
         //        OnEditContactClicked(sender, e);
         //    }
-                                             
+
         //}
 
         private void SingleContactDeleted(object sender, EventArgs e)
