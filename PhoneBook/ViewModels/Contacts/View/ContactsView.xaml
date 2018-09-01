@@ -1,0 +1,118 @@
+﻿<Window x:Class="PhoneBook.ViewModels.Contacts.View.ContactsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PhoneBook.ViewModels.Contacts.View"
+        mc:Ignorable="d"
+        Title="ContactsView" Height="750" Width="1250">
+    <Grid Margin="10"  >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBox FontSize="25"
+                 Text="{Binding Path=SearchString}"
+                 Foreground="BlueViolet"
+                 Grid.Column="0"
+                 Grid.Row="0"
+                 Grid.ColumnSpan="3"
+                 Width="385"
+                 Height="44"
+                 HorizontalAlignment="left"
+                 Margin="10"/>
+        <Button Height="44"
+                Command="{Binding SearchCommand}"
+                  Width="255"
+                  Grid.Row="0"
+                  Grid.Column="4"
+                  Grid.ColumnSpan="2"
+                  Content="Search Contact"   
+                  FontSize="28"
+                  FontWeight="bold"
+                  Background="Aqua"
+                  HorizontalAlignment="Center"/>
+        <Button Height="44"
+                 Command="{Binding AddNewContactCommand}"
+                  Width="255"
+                  Grid.Row="0"
+                  Grid.Column="6"
+                  Grid.ColumnSpan="2"
+                  Content="Add Contact"   
+                  FontSize="28"
+                  FontWeight="bold"
+                  Background="Aqua"
+                  HorizontalAlignment="Center"/>
+        <ListView 
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="8"
+            ItemsSource="{Binding ContactsList}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FirstName}"
+                                   FontSize="20"
+                                   Height="26"
+                                   Width="75"
+                                   FontWeight="Bold"/>
+                        <TextBlock Text="{Binding LastName}" 
+                                   FontSize="20"
+                                   Height="26"
+                                   Width="140"
+                                   FontWeight="Bold"/>
+                        <ComboBox 
+                            ItemsSource="{Binding PhoneNumbers}"  
+                            SelectedItem="{Binding SelectedPhone}"
+                            Width="215"
+                            Height="26"/>
+                        <TextBlock Text="{Binding Street}"                                    
+                                   FontSize="20"
+                                   Height="26"
+                                   Width="185"
+                                   Margin="12 0 0 5"
+                                   FontWeight="Medium"/>
+                        <TextBlock Text="{Binding City}" 
+                                   FontSize="20"
+                                   Height="26"
+                                   Width="140"
+                                   Margin="12 0 0 5"
+                                   FontWeight="Medium"/>
+                        <Button Content="Edit"
+                                     Command="{Binding EditClickedCommand}"
+                                      Width="110"
+                                       Height="26"
+                                       FontWeight="Bold"
+                                       Margin="25 0 0 0"
+                                       Cursor="Hand"
+                                      Background="LightGreen"/>
+                        <Button Content="Delete" 
+                                      Command="{Binding DeleteContactCommand}"                                      
+                                      Width="110"
+                                       Height="26"
+                                       FontWeight="Bold"
+                                       Margin="85 0 0 0"
+                                       Cursor="Hand"
+                                      Background="Red"/>
+                    </StackPanel>
+
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            
+        </ListView>
+        
+    </Grid>
+    
+    
+
+</Window>
