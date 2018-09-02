@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Projects\PhoneBook\PhoneBook\App.xaml
-31623867480
+4528015204
 
-141768142186
+16-2145815177
 721168239686
-MainWindow.xaml;ViewModels\Contacts\View\ContactsView.xaml;ViewModels\Forum\View\ForumView.xaml;
+MainWindow.xaml;ViewModels\AddPhone\View\PhoneView.xaml;ViewModels\Contacts\View\ContactsView.xaml;ViewModels\Forum\View\ForumView.xaml;
 
 False
 

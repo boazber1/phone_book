@@ -1,4 +1,6 @@
-﻿using PhoneBook.ViewModels.Contact;
+﻿using PhoneBook.ViewModels.AddPhone.View;
+using PhoneBook.ViewModels.AddPhone.ViewModel;
+using PhoneBook.ViewModels.Contact;
 using PhoneBook.ViewModels.Contacts.Model;
 using PhoneBook.ViewModels.Forum.ViewModel;
 using System;
@@ -32,11 +34,42 @@ namespace PhoneBook.ViewModels.Forum.View
 
             DataContext = _viewModel;
             _viewModel.AddPhoneContactClicked += OnAddPhoneClicked;
+            _viewModel.Saved += OnSaved;
+        }
+
+        private void OnSaved(object sender, EventArgs e)
+        {
+            DialogResult = true;
+            Close();
+        }
+        private void OnCancel(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
+            Close();
         }
 
         private void OnAddPhoneClicked(object sender, ContactEventArgs args)
         {
-            //TODO Open Add Phone Window
+            var phoneTypes = args.PhoneTypes;
+            var firstType = phoneTypes.First();
+            var model = new Phone
+            {
+                Id = -1,
+                PhoneNumber = string.Empty,
+                PhoneType = firstType
+            };
+            var viewModel = new PhoneViewModel(model, phoneTypes);
+            var window = new PhoneView(viewModel);
+            window.ShowDialog();
+            if (window.DialogResult.HasValue &&
+                window.DialogResult.Value)
+            {
+                if(viewModel.PhoneSaved)
+                {
+                    var phone = viewModel.GetModel();
+                    _viewModel.AddPhoneToList(model);
+                }
+            }
 
         }
 

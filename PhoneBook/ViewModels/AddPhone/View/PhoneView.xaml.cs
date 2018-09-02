@@ -21,14 +21,15 @@ namespace PhoneBook.ViewModels.AddPhone.View
     /// </summary>
     public partial class PhoneView : Window
     {
-        private readonly PhoneViewModel _viewModel;
+        private readonly PhoneViewModel _viewModel;        
 
-        public PhoneView(Phone phone, List<PhoneType> phoneTypes)
+        public PhoneView(PhoneViewModel viewModel)
         {
             InitializeComponent();
-            _viewModel = new PhoneViewModel(phone, phoneTypes);
+            _viewModel = viewModel;
             _viewModel.OnSaved += OnSaved;
             DataContext = _viewModel;
+            
         }
 
         private void OnSaved(object sender, EventArgs e)

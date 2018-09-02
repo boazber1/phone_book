@@ -68,3 +68,5 @@ C:\Projects\PhoneBook\PhoneBook\obj\Debug\PhoneBook.csproj.CoreCompileInputs.cac
 C:\Projects\PhoneBook\PhoneBook\obj\Debug\PhoneBook.csproj.CopyComplete
 C:\Projects\PhoneBook\PhoneBook\obj\Debug\PhoneBook.exe
 C:\Projects\PhoneBook\PhoneBook\obj\Debug\PhoneBook.pdb
+C:\Projects\PhoneBook\PhoneBook\obj\Debug\ViewModels\AddPhone\View\PhoneView.g.cs
+C:\Projects\PhoneBook\PhoneBook\obj\Debug\ViewModels\AddPhone\View\PhoneView.baml

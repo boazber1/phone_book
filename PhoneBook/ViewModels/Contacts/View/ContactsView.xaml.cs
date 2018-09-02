@@ -22,14 +22,16 @@ namespace PhoneBook.ViewModels.Contacts.View
     /// </summary>
     public partial class ContactsView : Window
     {
+        private ContactsViewModel _viewModel;
+
         public ContactsView()
         {
             InitializeComponent();
-            var viewModel  = new ContactsViewModel();
-            viewModel.OnNewContactClicked += OpenForumOnAddNewcontact;
-            viewModel.OnEdit += openEditOrAddForm;
+            _viewModel  = new ContactsViewModel();
+            _viewModel.OnNewContactClicked += OpenForumOnAddNewcontact;
+            _viewModel.OnEdit += openEditOrAddForm;
             //viewModel.OnEditContactClicked += OpenForumOnEditNewcontact;
-            DataContext = viewModel;          
+            DataContext = _viewModel;          
         }
 
         private void openEditOrAddForm(object sender, ContactsEventArgs args)
@@ -43,17 +45,30 @@ namespace PhoneBook.ViewModels.Contacts.View
                 {
                     ForumView forumView = new ForumView(contact, cities, phoneTypes);
                     forumView.ShowDialog();
+                    _viewModel.SearchCommand.Execute(null);
                 }
 
             }
                 
         }
 
-        public void OpenForumOnAddNewcontact(object sender, EventArgs e)
+        private void OpenForumOnAddNewcontact(object sender, ContactsEventArgs args)
         {
-            ForumView forumView = new ForumView(null, null);
-            forumView.ShowDialog();
-           
+
+            if (args != null)
+            {
+                var contact = args.Contact;
+                var cities = args.Cities;
+                var phoneTypes = args.PhoneTypes;
+                if (contact != null && cities != null && phoneTypes != null)
+                {
+                    ForumView forumView = new ForumView(contact, cities, phoneTypes);
+                    forumView.ShowDialog();
+                    _viewModel.SearchCommand.Execute(null);
+                }
+
+            }
+
         }
 
         public void OpenForumOnEditNewcontact(object sender, EventArgs e)

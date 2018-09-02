@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace PhoneBook.ViewModels.AddPhone.ViewModel
 {
-    class PhoneViewModel : ViewModelBase
+    public class PhoneViewModel : ViewModelBase
     {
         private Phone _phone;
         
@@ -66,6 +66,8 @@ namespace PhoneBook.ViewModels.AddPhone.ViewModel
         private void Save()
         {
             PhoneSaved = true;
+            if(OnSaved != null)
+                OnSaved(this, EventArgs.Empty);
         }
 
     }

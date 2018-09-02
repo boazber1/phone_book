@@ -113,25 +113,14 @@
             Width="325"
             Height="50"/>
         
+ 
         <Button 
             Margin="5"
             Grid.Column="0"
             Grid.Row="6"
             Grid.ColumnSpan="2"
             Content="Save"
-            Height="44"
-            Width="210"
-            FontSize="25"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            FontWeight="Bold"
-            Background="BurlyWood"/>
-        <Button 
-            Margin="5"
-            Grid.Column="0"
-            Grid.Row="6"
-            Grid.ColumnSpan="2"
-            Content="Save"
+            Command="{Binding SaveCommand}"
             Height="44"
             Width="210"
             FontSize="25"
@@ -145,6 +134,7 @@
             Grid.Row="6"
             Grid.ColumnSpan="2"
             Content="Cancel"
+            Click="OnCancel"
             Height="44"
             Width="210"
             FontSize="25"
@@ -159,7 +149,8 @@
             Width="485"
             Height="65"
             FontWeight="Bold"
-            Background="BurlyWood"/>
+            Background="BurlyWood"
+            Command="{Binding AddPhoneCommand}"/>
         <Button 
             Grid.Column="4"
             Grid.Row="2"

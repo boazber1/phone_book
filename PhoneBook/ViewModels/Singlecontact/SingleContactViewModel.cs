@@ -45,7 +45,7 @@ namespace PhoneBook.ViewModels.Contact
             _contact = contact;
             _cities = cities;
             _phoneTypes = phoneTypes;
-            SelectedPhone = _contact.PhoneNumbers.First();
+            SelectedPhone = _contact.PhoneNumbers.FirstOrDefault();
             DeleteContactCommand = new RelayCommand(DeleteContact);
             EditClickedCommand = new RelayCommand(OnEditClicked);
             AddPhoneCommand = new RelayCommand(AddPhone);
@@ -68,19 +68,13 @@ namespace PhoneBook.ViewModels.Contact
                 param.Add("LastName"    , lastName);
                 param.Add("Street"      , street);
                 param.Add("CityId"      , cityId);
-                param.Add("ret"         , dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+                param.Add("Result"      , dbType: DbType.Int32, direction: ParameterDirection.Output);
 
                 sqlConnection.Execute("Save"
-                                     , new {
-                                         Id = id,
-                                         FirstName = firstName,
-                                         LastName = lastName,
-                                         Street = street,
-                                         CityId = cityId
-                                     }
+                                     , param
                                      , commandType: System.Data.CommandType.StoredProcedure);
 
-                var idToInsertPhones = param.Get<int>("ret");
+                var idToInsertPhones = param.Get<int>("Result");
 
                 var newPhones = _contact.PhoneNumbers
                                         .Where(row => row.Id <= 0)
@@ -91,6 +85,7 @@ namespace PhoneBook.ViewModels.Contact
                     var phoneTypeId = phone.PhoneType.Id;
 
                     var paramsForPhone = new DynamicParameters();
+                    paramsForPhone.Add("ContactId", idToInsertPhones);
                     paramsForPhone.Add("PhoneNubmer", phoneNubmer);
                     paramsForPhone.Add("PhoneTypeId", phoneTypeId);
 
@@ -99,6 +94,8 @@ namespace PhoneBook.ViewModels.Contact
 
 
             }
+            if(Saved != null)
+                Saved(this, EventArgs.Empty);
         }
 
         private void AddPhone()
@@ -107,11 +104,17 @@ namespace PhoneBook.ViewModels.Contact
             {
                 var args = new ContactEventArgs
                 {
-                    Contact = _contact
+                    Contact = _contact,
+                    PhoneTypes = _phoneTypes
                 };
 
                 AddPhoneContactClicked(this, args);
             }
+        }
+
+        public void AddPhoneToList(Phone phone)
+        {
+            _contact.PhoneNumbers.Add(phone);
         }
 
         protected virtual void OnEditContactClicked(PhoneBook.ViewModels.Contacts.Model.Contact contact)

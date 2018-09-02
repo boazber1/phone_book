@@ -37,7 +37,7 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
         private List<City> _cities;
         private List<PhoneType> _phoneTypes;
 
-        public event EventHandler OnNewContactClicked;
+        public event EditContactClickedEventHandler OnNewContactClicked;
         public delegate void EditContactClickedEventHandler(object sender, ContactsEventArgs args);
         public event EditContactClickedEventHandler OnEdit;
         
@@ -71,7 +71,24 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
         {
            if(OnNewContactClicked != null)
             {
-                OnNewContactClicked(this, EventArgs.Empty);
+                var firstCity = _cities.First();
+                
+                var newModel = new Model.Contact()
+                {
+                    Id = -1,
+                    FirstName = string.Empty,
+                    LastName = string.Empty,
+                    Street = string.Empty,
+                    City = firstCity,
+                    PhoneNumbers = new List<Phone>()
+                };
+                var args = new ContactsEventArgs
+                {
+                    Contact = newModel,
+                    Cities = _cities,
+                    PhoneTypes = _phoneTypes
+                };
+                OnNewContactClicked(this, args);
             } 
             
         }
@@ -106,9 +123,9 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
               foreach(Model.Contact con in contacts)
             {                
 
-                var contactViewModel = new ContactViewModel(con, _cities);            
+                var contactViewModel = new ContactViewModel(con, _cities, _phoneTypes);            
                 contactViewModel.OnCotactDeleted += SingleContactDeleted;
-                contactViewModel.EditContactClicked += SingleContactEdit;
+                contactViewModel.EditContactClicked += SingleContactEdit;                
                 ContactsList.Add(contactViewModel);
             }
         }
@@ -150,7 +167,8 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
                 var argsForEvent = new ContactsEventArgs()
                 {
                     Contact = args.Contact,
-                    Cities = _cities,                    
+                    Cities = _cities,
+                    PhoneTypes = _phoneTypes
                 };
                 OnEdit(sender, argsForEvent);
             }
