@@ -22,15 +22,24 @@ namespace PhoneBook.ViewModels.Forum.View
     /// </summary>
     public partial class ForumView : Window
     {
-        public ForumView(Contacts.Model.Contact contact, List<City> cities)
+        private ContactViewModel _viewModel;
+        
+        public ForumView(Contacts.Model.Contact contact, List<City> cities, List<PhoneType> phoneTypes)
         {
             InitializeComponent();
-            DataContext = new ContactViewModel(contact, cities);
+
+            _viewModel = new ContactViewModel(contact, cities, phoneTypes);
+
+            DataContext = _viewModel;
+            _viewModel.AddPhoneContactClicked += OnAddPhoneClicked;
         }
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void OnAddPhoneClicked(object sender, ContactEventArgs args)
         {
+            //TODO Open Add Phone Window
 
         }
+
+
     }
 }

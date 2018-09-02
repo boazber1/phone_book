@@ -20,7 +20,7 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
 {
     class ContactsEventArgs : ContactEventArgs
     {
-        public List<City> Cities { get; set; }
+        public List<City> Cities { get; set; }        
     }
 
     class ContactsViewModel : ViewModelBase 
@@ -35,6 +35,7 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
         public ICommand AddNewContactCommand { get; set; }
         private string _searchString;
         private List<City> _cities;
+        private List<PhoneType> _phoneTypes;
 
         public event EventHandler OnNewContactClicked;
         public delegate void EditContactClickedEventHandler(object sender, ContactsEventArgs args);
@@ -59,7 +60,9 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
             //EditContactCommand = new RelayCommand(EditContact);
             AddNewContactCommand = new RelayCommand(AddContact);
             _cities = GetAllCities();
-            
+            _phoneTypes = GetAllPhoneType();
+
+
         }
 
 
@@ -125,6 +128,21 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
           
         }
 
+        private List<PhoneType> GetAllPhoneType()
+        {
+            var phoneTypes = new List<PhoneType>();
+
+            using (var sqlCon = new SqlConnection(@"Server=localhost\SQLEXPRESS;Database=PhoneBook;Trusted_Connection=True;"))
+            {
+                phoneTypes = sqlCon.Query<PhoneType>("getAllPhoneType", commandType: System.Data.CommandType.StoredProcedure).ToList();
+
+            }
+
+
+            return phoneTypes;
+
+        }
+
         private void SingleContactEdit(object sender, ContactEventArgs args)
         {
             if(OnEdit != null)
@@ -132,7 +150,7 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
                 var argsForEvent = new ContactsEventArgs()
                 {
                     Contact = args.Contact,
-                    Cities = _cities,
+                    Cities = _cities,                    
                 };
                 OnEdit(sender, argsForEvent);
             }

@@ -112,24 +112,7 @@
             Grid.ColumnSpan="3"
             Width="325"
             Height="50"/>
-        <TextBlock 
-            Margin="5"
-            Grid.Column="0"
-            Grid.Row="5"
-            FontSize="20"
-            FontWeight="DemiBold"
-            Foreground="Black"
-            TextAlignment="Center"
-            VerticalAlignment="Center"
-            Background="LightBlue">
-            Add Phone
-        </TextBlock>
-        <TextBox 
-            Grid.Column="1"
-            Grid.Row="5"
-            Grid.ColumnSpan="3"
-            Width="325"
-            Height="50"/>
+        
         <Button 
             Margin="5"
             Grid.Column="0"
@@ -169,12 +152,12 @@
             HorizontalAlignment="Center"
             FontWeight="Bold"
             Background="BurlyWood"/>
-        <Button 
-            Grid.Column="4"
+        <Button             
+            Grid.ColumnSpan="4"
             Grid.Row="5"
-            Content="Add"
-            Width="85"
-            Height="35"
+            Content="Add Phone"
+            Width="485"
+            Height="65"
             FontWeight="Bold"
             Background="BurlyWood"/>
         <Button 

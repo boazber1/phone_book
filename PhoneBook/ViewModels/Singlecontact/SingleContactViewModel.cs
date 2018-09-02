@@ -11,12 +11,14 @@ using System.Data.SqlClient;
 using PhoneBook.ViewModels.Contacts.Model;
 using System.Windows;
 using PhoneBook.ViewModels.Contacts.ViewModel;
+using System.Data;
 
 namespace PhoneBook.ViewModels.Contact
 {
     public class ContactEventArgs : EventArgs
     {
-        public PhoneBook.ViewModels.Contacts.Model.Contact Contact { get; set; }        
+        public Contacts.Model.Contact Contact { get; set; }
+        public List<PhoneType> PhoneTypes { get; set; }
     }
 
     public class ContactViewModel : ViewModelBase
@@ -25,23 +27,91 @@ namespace PhoneBook.ViewModels.Contact
         private PhoneBook.ViewModels.Contacts.Model.Contact _contact;
         private Phone _selectedPhone;        
         private List<City> _cities;
+        private List<PhoneType> _phoneTypes;
         public ICommand DeleteContactCommand { get; set; }       
         public ICommand EditClickedCommand { get; set; }
+        public ICommand AddPhoneCommand { get; set; }
+        public ICommand SaveCommand { get; set; }
 
         public event EventHandler OnCotactDeleted;
         //public event EventHandler OnCotactEditClicked;
-        public delegate void EditContactClickedEventHandler(object sender, ContactEventArgs args);
-        public event EditContactClickedEventHandler EditContactClicked;
+        public delegate void ContactClickedEventHandler(object sender, ContactEventArgs args);
+        public event ContactClickedEventHandler EditContactClicked;
+        public event ContactClickedEventHandler AddPhoneContactClicked;
+        public event EventHandler Saved;
 
-
-        public ContactViewModel(PhoneBook.ViewModels.Contacts.Model.Contact contact, List<City> cities)
+        public ContactViewModel(Contacts.Model.Contact contact, List<City> cities, List<PhoneType> phoneTypes)
         {
             _contact = contact;
             _cities = cities;
+            _phoneTypes = phoneTypes;
             SelectedPhone = _contact.PhoneNumbers.First();
             DeleteContactCommand = new RelayCommand(DeleteContact);
             EditClickedCommand = new RelayCommand(OnEditClicked);
-                        
+            AddPhoneCommand = new RelayCommand(AddPhone);
+            SaveCommand = new RelayCommand(Save);
+        }
+
+        private void Save()
+        {
+            using(var sqlConnection = new SqlConnection(@"Server=localhost\SQLEXPRESS;Database=PhoneBook;Trusted_Connection=True;"))
+            {
+                var param = new DynamicParameters();
+                var id = _contact.Id;
+                var firstName = _contact.FirstName;
+                var lastName = _contact.LastName;
+                var street = _contact.Street;
+                var cityId = _contact.City.Id;
+
+                param.Add("Id"          , id);
+                param.Add("FirstName"   , firstName);
+                param.Add("LastName"    , lastName);
+                param.Add("Street"      , street);
+                param.Add("CityId"      , cityId);
+                param.Add("ret"         , dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
+                sqlConnection.Execute("Save"
+                                     , new {
+                                         Id = id,
+                                         FirstName = firstName,
+                                         LastName = lastName,
+                                         Street = street,
+                                         CityId = cityId
+                                     }
+                                     , commandType: System.Data.CommandType.StoredProcedure);
+
+                var idToInsertPhones = param.Get<int>("ret");
+
+                var newPhones = _contact.PhoneNumbers
+                                        .Where(row => row.Id <= 0)
+                                        .ToList();
+                newPhones.ForEach(phone => 
+                {
+                    var phoneNubmer = phone.PhoneNumber;
+                    var phoneTypeId = phone.PhoneType.Id;
+
+                    var paramsForPhone = new DynamicParameters();
+                    paramsForPhone.Add("PhoneNubmer", phoneNubmer);
+                    paramsForPhone.Add("PhoneTypeId", phoneTypeId);
+
+                    sqlConnection.Execute("AddPhone", paramsForPhone, commandType: CommandType.StoredProcedure);
+                });
+
+
+            }
+        }
+
+        private void AddPhone()
+        {
+            if(AddPhoneContactClicked != null)
+            {
+                var args = new ContactEventArgs
+                {
+                    Contact = _contact
+                };
+
+                AddPhoneContactClicked(this, args);
+            }
         }
 
         protected virtual void OnEditContactClicked(PhoneBook.ViewModels.Contacts.Model.Contact contact)
@@ -51,6 +121,7 @@ namespace PhoneBook.ViewModels.Contact
                 var args = new ContactEventArgs
                 {
                     Contact = contact,
+                    PhoneTypes = _phoneTypes,
                 };
                 EditContactClicked(this, args);
             }

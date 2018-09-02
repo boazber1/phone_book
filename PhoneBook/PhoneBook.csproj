@@ -72,6 +72,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ViewModels\AddPhone\ViewModel\PhoneViewModel.cs" />
+    <Compile Include="ViewModels\AddPhone\View\PhoneView.xaml.cs">
+      <DependentUpon>PhoneView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\Contacts\Model\Contact.cs" />
     <Compile Include="ViewModels\Contacts\ViewModel\ContactsViewModel.cs" />
     <Compile Include="ViewModels\Contacts\View\ContactsView.xaml.cs">
@@ -97,6 +101,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="ViewModels\AddPhone\View\PhoneView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ViewModels\Contacts\View\ContactsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -11,6 +11,22 @@ namespace PhoneBook.ViewModels.Contacts.Model
         public int Id { get; set; }
         public string Type { get; set; }
 
+        public override string ToString()
+        {
+            return Type;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(obj is PhoneType)
+            {
+                var otherPhoneType = (PhoneType)obj;
+                var id = this.Id;
+                var otherId = otherPhoneType.Id;
+                return id == otherId;
+            }
+            return false;
+        }
     }
 
     public class City

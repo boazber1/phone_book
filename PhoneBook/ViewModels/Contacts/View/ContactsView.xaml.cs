@@ -38,9 +38,10 @@ namespace PhoneBook.ViewModels.Contacts.View
             {
                 var contact = args.Contact;
                 var cities = args.Cities;
-                if(contact != null && cities != null)
+                var phoneTypes = args.PhoneTypes;
+                if (contact != null && cities != null && phoneTypes != null)
                 {
-                    ForumView forumView = new ForumView(contact, cities);
+                    ForumView forumView = new ForumView(contact, cities, phoneTypes);
                     forumView.ShowDialog();
                 }
 
