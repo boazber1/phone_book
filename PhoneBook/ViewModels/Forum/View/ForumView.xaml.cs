@@ -1,4 +1,5 @@
 ﻿using PhoneBook.ViewModels.Contact;
+using PhoneBook.ViewModels.Contacts.Model;
 using PhoneBook.ViewModels.Forum.ViewModel;
 using System;
 using System.Collections.Generic;
@@ -21,12 +22,15 @@ namespace PhoneBook.ViewModels.Forum.View
     /// </summary>
     public partial class ForumView : Window
     {
-        public ForumView(Contacts.Model.Contact contact)
+        public ForumView(Contacts.Model.Contact contact, List<City> cities)
         {
             InitializeComponent();
-            DataContext = new ContactViewModel(contact);
+            DataContext = new ContactViewModel(contact, cities);
         }
 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
 
+        }
     }
 }

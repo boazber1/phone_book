@@ -32,14 +32,15 @@ namespace PhoneBook.ViewModels.Contacts.View
             DataContext = viewModel;          
         }
 
-        private void openEditOrAddForm(object sender, ContactEventArgs args)
+        private void openEditOrAddForm(object sender, ContactsEventArgs args)
         {
             if(args != null)
             {
                 var contact = args.Contact;
-                if(contact != null)
+                var cities = args.Cities;
+                if(contact != null && cities != null)
                 {
-                    ForumView forumView = new ForumView(contact);
+                    ForumView forumView = new ForumView(contact, cities);
                     forumView.ShowDialog();
                 }
 
@@ -49,7 +50,7 @@ namespace PhoneBook.ViewModels.Contacts.View
 
         public void OpenForumOnAddNewcontact(object sender, EventArgs e)
         {
-            ForumView forumView = new ForumView(null);
+            ForumView forumView = new ForumView(null, null);
             forumView.ShowDialog();
            
         }

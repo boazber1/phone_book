@@ -16,15 +16,15 @@ namespace PhoneBook.ViewModels.Contact
 {
     public class ContactEventArgs : EventArgs
     {
-        public PhoneBook.ViewModels.Contacts.Model.Contact Contact { get; set; }
+        public PhoneBook.ViewModels.Contacts.Model.Contact Contact { get; set; }        
     }
 
     public class ContactViewModel : ViewModelBase
     {        
 
-        private  PhoneBook.ViewModels.Contacts.Model.Contact _contact;
-        private Phone _selectedPhone;
-
+        private PhoneBook.ViewModels.Contacts.Model.Contact _contact;
+        private Phone _selectedPhone;        
+        private List<City> _cities;
         public ICommand DeleteContactCommand { get; set; }       
         public ICommand EditClickedCommand { get; set; }
 
@@ -34,17 +34,14 @@ namespace PhoneBook.ViewModels.Contact
         public event EditContactClickedEventHandler EditContactClicked;
 
 
-        public ContactViewModel(PhoneBook.ViewModels.Contacts.Model.Contact contact)
+        public ContactViewModel(PhoneBook.ViewModels.Contacts.Model.Contact contact, List<City> cities)
         {
             _contact = contact;
+            _cities = cities;
             SelectedPhone = _contact.PhoneNumbers.First();
             DeleteContactCommand = new RelayCommand(DeleteContact);
             EditClickedCommand = new RelayCommand(OnEditClicked);
-        }
-
-        private void OnEditClicked()
-        {
-            OnEditContactClicked(_contact);
+                        
         }
 
         protected virtual void OnEditContactClicked(PhoneBook.ViewModels.Contacts.Model.Contact contact)
@@ -57,8 +54,14 @@ namespace PhoneBook.ViewModels.Contact
                 };
                 EditContactClicked(this, args);
             }
-                
+
         }
+
+        private void OnEditClicked()
+        {
+            OnEditContactClicked(_contact);
+        }
+
 
         public string City
         {
@@ -69,6 +72,19 @@ namespace PhoneBook.ViewModels.Contact
             }
         }
 
+        public List<City> Cities
+        {
+            get { return _cities; }
+        }
+
+        public City SelectedCity {
+            get { return _contact.City ?? new City() ; }
+            set
+            {
+                _contact.City = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public string Street
         {
@@ -128,7 +144,6 @@ namespace PhoneBook.ViewModels.Contact
             } }
 
 
-
         private void DeleteContact()
         {
             try
@@ -154,6 +169,8 @@ namespace PhoneBook.ViewModels.Contact
             }   
            
         }
+
+
     }
 }
 
