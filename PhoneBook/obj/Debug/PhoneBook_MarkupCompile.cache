@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Projects\PhoneBook\PhoneBook\obj\Debug\
+C:\Users\Boaz\source\repos\PhoneBook\PhoneBook\obj\Debug\
 PhoneBook
 none
 false
 DEBUG;TRACE
-C:\Projects\PhoneBook\PhoneBook\App.xaml
+C:\Users\Boaz\source\repos\PhoneBook\PhoneBook\App.xaml
 4528015204
 
 16-2145815177
-721168239686
+72-1581772270
 MainWindow.xaml;ViewModels\AddPhone\View\PhoneView.xaml;ViewModels\Contacts\View\ContactsView.xaml;ViewModels\Forum\View\ForumView.xaml;
 
 False

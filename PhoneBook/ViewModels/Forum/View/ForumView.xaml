@@ -158,8 +158,10 @@
             Width="85"
             Height="35"
             FontWeight="Bold"
-            Background="Red"/>
+            Background="Red"
+            Command="{Binding DeletePhoneCommand}"/>
         <ComboBox 
+            Name="PhoneCB"
             ItemsSource="{Binding PhoneNumbers}"
             SelectedItem="{Binding SelectedPhone}"
              Grid.Column="1"

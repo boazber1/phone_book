@@ -29,7 +29,7 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
         
 
         public ObservableCollection<ContactViewModel> ContactsList { get; set; }
-        
+        public ObservableCollection<String> _autoCompleteDbCollection;
         public ICommand SearchCommand { get; set; }        
         public ICommand EditContactCommand { get; set; }
         public ICommand AddNewContactCommand { get; set; }
@@ -40,8 +40,17 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
         public event EditContactClickedEventHandler OnNewContactClicked;
         public delegate void EditContactClickedEventHandler(object sender, ContactsEventArgs args);
         public event EditContactClickedEventHandler OnEdit;
-        
 
+
+        public ContactsViewModel()
+        {
+            ContactsList = new ObservableCollection<ContactViewModel>();
+            _autoCompleteDbCollection = new ObservableCollection<string>();
+            SearchCommand = new RelayCommand(Search);
+            AddNewContactCommand = new RelayCommand(AddContact);
+            _cities = GetAllCities();
+            _phoneTypes = GetAllPhoneType();
+        }
 
         public string SearchString
         {
@@ -49,23 +58,37 @@ namespace PhoneBook.ViewModels.Contacts.ViewModel
             set
             {
                 _searchString = value;
+                AutoCompleteFromDB();
                 RaisePropertyChanged();
             }
         }
 
-        public ContactsViewModel()
+        public ObservableCollection<String> AutoCompleteDbCollection
         {
-            ContactsList = new ObservableCollection<ContactViewModel>();          
-            SearchCommand = new RelayCommand(Search);           
-            //EditContactCommand = new RelayCommand(EditContact);
-            AddNewContactCommand = new RelayCommand(AddContact);
-            _cities = GetAllCities();
-            _phoneTypes = GetAllPhoneType();
-
-
+            get { return _autoCompleteDbCollection; }
+            set
+            {
+                _autoCompleteDbCollection = value;
+            }
         }
 
+        private void AutoCompleteFromDB()
+        {
+            _autoCompleteDbCollection.Clear();
+            var listForAutoComplete = new List<string>();
 
+            using (var sqlCon = new SqlConnection(@"Server=localhost\SQLEXPRESS;Database=PhoneBook;Trusted_Connection=True;"))
+            {
+                listForAutoComplete = sqlCon.Query<string>("autoCompleteForSearch", new { searchStringforAutoComplete = SearchString }, commandType: System.Data.CommandType.StoredProcedure).ToList();
+
+            }
+
+            foreach(var item in listForAutoComplete)
+            {
+                _autoCompleteDbCollection.Add(item);
+            }
+            
+        }
 
         private void AddContact()
         {

@@ -31,7 +31,61 @@ namespace PhoneBook.ViewModels.Contacts.View
             _viewModel.OnNewContactClicked += OpenForumOnAddNewcontact;
             _viewModel.OnEdit += openEditOrAddForm;
             //viewModel.OnEditContactClicked += OpenForumOnEditNewcontact;
-            DataContext = _viewModel;          
+            DataContext = _viewModel;
+            AutoComplateBorder.Visibility = Visibility.Collapsed;
+            _viewModel.AutoCompleteDbCollection.CollectionChanged += AutoCompleteDbCollection_CollectionChanged;
+        }
+
+        private void AutoCompleteDbCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs eventArgs)
+        {
+
+            switch (eventArgs.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                    AutoComplateBorder.Visibility = System.Windows.Visibility.Visible;
+                    var fullNames = eventArgs.NewItems.Cast<string>().ToList();
+                    foreach (var fullName in fullNames)
+                    {
+                        var block = new TextBlock();
+
+                        // Add the text   
+                        block.Text = fullName;
+
+                        // A little style...   
+                        block.Margin = new Thickness(2, 3, 2, 3);
+                        block.Cursor = Cursors.Hand;
+
+                        // Mouse events   
+                        block.MouseLeftButtonUp += (s, e) =>
+                        {
+                            SearchTextBox.Text = (s as TextBlock).Text;
+                        };
+
+                        block.MouseEnter += (s, e) =>
+                        {
+                            var b = s as TextBlock;
+                            b.Background = Brushes.PeachPuff;
+                        };
+
+                        block.MouseLeave += (s, e) =>
+                        {
+                            var b = s as TextBlock;
+                            b.Background = Brushes.Transparent;
+                        };
+
+                        // Add to the panel   
+                        ResultStack.Children.Add(block);
+                    }
+                    
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Reset:
+                    ResultStack.Children.Clear();
+                    AutoComplateBorder.Visibility = System.Windows.Visibility.Collapsed;
+                    break;
+            }
+
+           // throw new NotImplementedException();
+
         }
 
         private void openEditOrAddForm(object sender, ContactsEventArgs args)

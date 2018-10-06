@@ -70,3 +70,5 @@ C:\Projects\PhoneBook\PhoneBook\obj\Debug\PhoneBook.exe
 C:\Projects\PhoneBook\PhoneBook\obj\Debug\PhoneBook.pdb
 C:\Projects\PhoneBook\PhoneBook\obj\Debug\ViewModels\AddPhone\View\PhoneView.g.cs
 C:\Projects\PhoneBook\PhoneBook\obj\Debug\ViewModels\AddPhone\View\PhoneView.baml
+C:\Users\Boaz\source\repos\phonebook\PhoneBook\obj\Debug\ViewModels\AddPhone\View\PhoneView.g.cs
+C:\Users\Boaz\source\repos\phonebook\PhoneBook\obj\Debug\ViewModels\AddPhone\View\PhoneView.baml

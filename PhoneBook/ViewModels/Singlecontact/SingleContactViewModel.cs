@@ -12,6 +12,8 @@ using PhoneBook.ViewModels.Contacts.Model;
 using System.Windows;
 using PhoneBook.ViewModels.Contacts.ViewModel;
 using System.Data;
+using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace PhoneBook.ViewModels.Contact
 {
@@ -28,13 +30,15 @@ namespace PhoneBook.ViewModels.Contact
         private Phone _selectedPhone;        
         private List<City> _cities;
         private List<PhoneType> _phoneTypes;
+        private List<int> _phoneIdsToDelete;
         public ICommand DeleteContactCommand { get; set; }       
         public ICommand EditClickedCommand { get; set; }
         public ICommand AddPhoneCommand { get; set; }
         public ICommand SaveCommand { get; set; }
+        public ICommand DeletePhoneCommand { get; set; }
 
         public event EventHandler OnCotactDeleted;
-        //public event EventHandler OnCotactEditClicked;
+
         public delegate void ContactClickedEventHandler(object sender, ContactEventArgs args);
         public event ContactClickedEventHandler EditContactClicked;
         public event ContactClickedEventHandler AddPhoneContactClicked;
@@ -42,14 +46,32 @@ namespace PhoneBook.ViewModels.Contact
 
         public ContactViewModel(Contacts.Model.Contact contact, List<City> cities, List<PhoneType> phoneTypes)
         {
+           
             _contact = contact;
             _cities = cities;
             _phoneTypes = phoneTypes;
+            _phoneIdsToDelete = new List<int>();
             SelectedPhone = _contact.PhoneNumbers.FirstOrDefault();
             DeleteContactCommand = new RelayCommand(DeleteContact);
             EditClickedCommand = new RelayCommand(OnEditClicked);
             AddPhoneCommand = new RelayCommand(AddPhone);
             SaveCommand = new RelayCommand(Save);
+            DeletePhoneCommand = new RelayCommand(DeletePhone);
+        }
+
+        
+
+        private void DeletePhone()
+        {
+            
+            if (_contact.PhoneNumbers.Count > 1)
+            {                
+                SelectedPhone = _contact.PhoneNumbers.FirstOrDefault();
+                int selectedId = _selectedPhone.Id;
+                _phoneIdsToDelete.Add(selectedId);
+                PhoneNumbers.Remove(_selectedPhone);
+                SelectedPhone = _contact.PhoneNumbers.FirstOrDefault();
+            }
         }
 
         private void Save()
@@ -93,8 +115,13 @@ namespace PhoneBook.ViewModels.Contact
                 });
 
 
+                //foreach (var phoneId in _phoneIdsToDelete)
+                //{
+                //    sqlConnection.Execute("deletePhoneFromContact", new { phonedIdToDelete = phoneId }, commandType: System.Data.CommandType.StoredProcedure);
+                //}
+
             }
-            if(Saved != null)
+            if (Saved != null)
                 Saved(this, EventArgs.Empty);
         }
 
@@ -145,6 +172,19 @@ namespace PhoneBook.ViewModels.Contact
                 RaisePropertyChanged();
             }
         }
+     
+
+        public List<int> PhoneIdsToDelete
+        {
+            get { return _phoneIdsToDelete; }
+            set
+            {
+                _phoneIdsToDelete = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
 
         public List<City> Cities
         {
@@ -244,7 +284,11 @@ namespace PhoneBook.ViewModels.Contact
            
         }
 
+   
+
 
     }
+
+
 }
 

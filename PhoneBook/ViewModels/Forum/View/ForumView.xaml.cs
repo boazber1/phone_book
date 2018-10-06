@@ -73,6 +73,10 @@ namespace PhoneBook.ViewModels.Forum.View
 
         }
 
-
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            //int i = 5;
+           // _viewModel
+        }
     }
 }

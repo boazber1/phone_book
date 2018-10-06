@@ -18,19 +18,39 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="160"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBox FontSize="25"
-                 Text="{Binding Path=SearchString}"
+                 Name="SearchTextBox"
+                 Text="{Binding Path=SearchString, UpdateSourceTrigger=PropertyChanged}"
                  Foreground="BlueViolet"
                  Grid.Column="0"
                  Grid.Row="0"
                  Grid.ColumnSpan="3"
                  Width="385"
                  Height="44"
+                 VerticalAlignment="Top"
                  HorizontalAlignment="left"
                  Margin="10"/>
+
+        <Border  Grid.Column="0"
+                 Grid.Row="0"
+                 Grid.ColumnSpan="3"
+                 Width="385" 
+                 Height="100"
+                 VerticalAlignment="Top"
+                 BorderBrush="Black" 
+                 BorderThickness="1"
+                 Margin="-53,54,0,0"
+                 
+                 Name="AutoComplateBorder">
+                
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Name="ResultStack"></StackPanel>
+            </ScrollViewer>
+        
+        </Border>
         <Button Height="44"
                 Command="{Binding SearchCommand}"
                   Width="255"
