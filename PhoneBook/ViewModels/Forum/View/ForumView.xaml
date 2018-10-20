@@ -144,11 +144,14 @@
             Background="BurlyWood"/>
         <Button             
             Grid.ColumnSpan="4"
-            Grid.Row="5"
+            Grid.Row="5"            
             Content="Add Phone"
             Width="485"
             Height="65"
+            Margin="105 0 0 0"
+            FontSize="26"
             FontWeight="Bold"
+            HorizontalAlignment="Center"
             Background="BurlyWood"
             Command="{Binding AddPhoneCommand}"/>
         <Button 
@@ -162,7 +165,7 @@
             Command="{Binding DeletePhoneCommand}"/>
         <ComboBox 
             Name="PhoneCB"
-            ItemsSource="{Binding PhoneNumbers}"
+            ItemsSource="{Binding ContactPhones}"
             SelectedItem="{Binding SelectedPhone}"
              Grid.Column="1"
             Grid.Row="2"

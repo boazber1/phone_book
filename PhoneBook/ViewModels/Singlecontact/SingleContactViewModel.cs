@@ -31,6 +31,7 @@ namespace PhoneBook.ViewModels.Contact
         private List<City> _cities;
         private List<PhoneType> _phoneTypes;
         private List<int> _phoneIdsToDelete;
+        private ObservableCollection<Phone> _contactPhones;
         public ICommand DeleteContactCommand { get; set; }       
         public ICommand EditClickedCommand { get; set; }
         public ICommand AddPhoneCommand { get; set; }
@@ -45,13 +46,17 @@ namespace PhoneBook.ViewModels.Contact
         public event EventHandler Saved;
 
         public ContactViewModel(Contacts.Model.Contact contact, List<City> cities, List<PhoneType> phoneTypes)
-        {
-           
+        {           
             _contact = contact;
             _cities = cities;
             _phoneTypes = phoneTypes;
-            _phoneIdsToDelete = new List<int>();
+            _phoneIdsToDelete = new List<int>();            
             SelectedPhone = _contact.PhoneNumbers.FirstOrDefault();
+            _contactPhones = new ObservableCollection<Phone>();
+            foreach(var phone in _contact.PhoneNumbers)
+            {
+                _contactPhones.Add(phone);
+            }
             DeleteContactCommand = new RelayCommand(DeleteContact);
             EditClickedCommand = new RelayCommand(OnEditClicked);
             AddPhoneCommand = new RelayCommand(AddPhone);
@@ -64,13 +69,19 @@ namespace PhoneBook.ViewModels.Contact
         private void DeletePhone()
         {
             
-            if (_contact.PhoneNumbers.Count > 1)
+            if (ContactPhones.Count > 1)
             {                
-                SelectedPhone = _contact.PhoneNumbers.FirstOrDefault();
-                int selectedId = _selectedPhone.Id;
+                
+                int selectedId = SelectedPhone.Id;
                 _phoneIdsToDelete.Add(selectedId);
-                PhoneNumbers.Remove(_selectedPhone);
-                SelectedPhone = _contact.PhoneNumbers.FirstOrDefault();
+                ContactPhones.Remove(SelectedPhone);
+                SelectedPhone = ContactPhones.FirstOrDefault();
+            }
+
+            else
+            {
+                MessageBox.Show(" Can't Deleted phone - Contact has one phone number");
+
             }
         }
 
@@ -115,10 +126,12 @@ namespace PhoneBook.ViewModels.Contact
                 });
 
 
-                //foreach (var phoneId in _phoneIdsToDelete)
-                //{
-                //    sqlConnection.Execute("deletePhoneFromContact", new { phonedIdToDelete = phoneId }, commandType: System.Data.CommandType.StoredProcedure);
-                //}
+                foreach (var phoneId in _phoneIdsToDelete)
+                {
+                    sqlConnection.Execute("deletePhoneFromContact", new { phonedIdToDelete = phoneId }, commandType: System.Data.CommandType.StoredProcedure);
+                }
+
+                _phoneIdsToDelete.Clear();
 
             }
             if (Saved != null)
@@ -172,7 +185,17 @@ namespace PhoneBook.ViewModels.Contact
                 RaisePropertyChanged();
             }
         }
-     
+
+        public ObservableCollection<Phone> ContactPhones
+        {
+            get { return _contactPhones; }
+            set
+            {
+                _contactPhones = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
         public List<int> PhoneIdsToDelete
         {
